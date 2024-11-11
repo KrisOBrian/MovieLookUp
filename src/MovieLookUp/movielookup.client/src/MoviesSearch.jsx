@@ -2,16 +2,15 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const MoviesSearch = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [title, setTitle] = useState('');
     const [genre, setGenre] = useState('');
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Function to handle the search and fetch movies from the backend
     const fetchMovies = async () => {
-        if (!searchTerm || !genre) {
-            setError('Please provide both title and genre.');
+        if (!title) {
+            setError('Please provide a title and optional genre.');
             return;
         }
 
@@ -20,12 +19,11 @@ const MoviesSearch = () => {
         try {
             const response = await axios.get('/movies', {
                 params: {
-                    title: searchTerm,
+                    title: title,
                     genre: genre
                 }
             });
 
-            // Assuming the response is an array of movie objects
             setMovies(response.data);
         } catch (err) {
             setError('Failed to fetch movies.');
@@ -36,7 +34,7 @@ const MoviesSearch = () => {
     };
 
     const handleSearchTermChange = (e) => {
-        setSearchTerm(e.target.value);
+        setTitle(e.target.value);
     };
 
     const handleGenreChange = (e) => {
@@ -55,7 +53,7 @@ const MoviesSearch = () => {
             <div>
                 <input
                     type="text"
-                    value={searchTerm}
+                    value={title}
                     onChange={handleSearchTermChange}
                     placeholder="Search by title"
                 />
